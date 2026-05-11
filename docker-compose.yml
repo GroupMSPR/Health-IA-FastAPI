@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  healthai-ia:
+    build: .
+    container_name: healthai_fastapi
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./app:/code/app  # dev
+      - ./docker-volumes:/code/data # sauvegarde/persistance
+    environment:
+      - OLLAMA_URL=http://ollama-container:11434
+    restart: always
+
+  # orchestration Ollama ici (optionnel si déjà sur un autre container)
+  # ollama:
+  #   image: ollama/ollama
+  #   container_name: ollama_service
