@@ -336,3 +336,5 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 ---
 
 Dernière mise à jour : 29 mai 2026
+
+Pour toute question ou contribution, consultez le repository ou ouvrez une issue.
