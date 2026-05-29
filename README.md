@@ -2,8 +2,10 @@
 
 **Microservice d'Intelligence Artificielle** de la plateforme HealthAI Coach, construit avec **FastAPI** et **Ollama**. Cette API permet d'analyser des images de repas grâce au modèle multimodal **LLaVA**, d'estimer les calories, de lister les macronutriments et de fournir des recommandations nutritionnelles.
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-009688?logo=fastapi&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-0.24+-009688?logo=ollama&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-LLaVA-black)
 ![Ollama](https://img.shields.io/badge/Ollama-LLaVA-black)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
