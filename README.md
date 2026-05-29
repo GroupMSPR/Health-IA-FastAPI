@@ -56,13 +56,16 @@ Health-IA-FastAPI/
 ```mermaid
 graph TD
     Client("📱 Client Frontend / Mobile")
+    Backend("⚙️ Backend Laravel (Port 80)")
     API("⚡ FastAPI Port 4000")
     Ollama("🧠 Serveur Ollama Port 11434")
 
-    Client -- "Requête POST avec Image (multipart/form-data)" --> API
+    Client -- "Requête HTTP (Envoi de l'image)" --> Backend
+    Backend -- "Requête POST avec Image (multipart/form-data)" --> API
     API -- "Conversion Base64 + Prompt Expert Nutrition" --> Ollama
     Ollama -. "Analyse du repas par le modèle LLaVA" .-> API
-    API -- "Retour JSON structuré" --> Client
+    API -- "Retour de l'analyse" --> Backend
+    Backend -- "Retour JSON structuré" --> Client
 ```
 
 ---
