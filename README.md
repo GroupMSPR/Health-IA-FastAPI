@@ -6,6 +6,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-009688?logo=fastapi&logoColor=white)
 ![Ollama](https://img.shields.io/badge/Ollama-0.24+-009688?logo=ollama&logoColor=white)
 ![LLaVA](https://img.shields.io/badge/LLaVA-1.6+-009688?logo=volcan&logoColor=white)
+![LLaVA](LLaVA-indigo?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
 ![Type](https://img.shields.io/badge/Type-Microservice_IA-purple)
