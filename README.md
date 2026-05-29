@@ -53,18 +53,16 @@ Health-IA-FastAPI/
 
 ### Diagramme de flux
 
-```text
-Client (Frontend/Mobile)
-    ↓
-Requête POST avec Image (multipart/form-data)
-    ↓
-FastAPI (Port 4000)
-    ↓ (Conversion Base64 + Prompt Expert Nutrition)
-Serveur Ollama (Port 11434)
-    ↓ (Analyse par le modèle LLaVA)
-Retour JSON structuré
-    ↓
-Client
+```mermaid
+graph TD
+    Client("📱 Client Frontend / Mobile")
+    API("⚡ FastAPI Port 4000")
+    Ollama("🧠 Serveur Ollama Port 11434")
+
+    Client -- "Requête POST avec Image (multipart/form-data)" --> API
+    API -- "Conversion Base64 + Prompt Expert Nutrition" --> Ollama
+    Ollama -. "Analyse du repas par le modèle LLaVA" .-> API
+    API -- "Retour JSON structuré" --> Client
 ```
 
 ---
