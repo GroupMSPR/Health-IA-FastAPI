@@ -1,8 +1,8 @@
-import os
 import base64
-import requests
-from fastapi import FastAPI, File, UploadFile, HTTPException
+import os
 
+import requests
+from fastapi import FastAPI, File, HTTPException, UploadFile
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 
