@@ -1,0 +1,29 @@
+[tool.ruff]
+target-version = "py312"
+
+line-length = 100
+
+exclude = [
+    ".git",
+    ".github",
+    "__pycache__",
+    "venv",
+    "env",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # style errors (Erreurs de style)
+    "W",   # style warnings (Avertissements)
+    "F",   # Pyflakes (Erreurs de logique, variables non utilisées)
+    "I",   # isort (Trie auto des imports a->z)
+    "UP",  # pyupgrade (S'assure de la syntaxe Python 3.12)
+]
+
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
