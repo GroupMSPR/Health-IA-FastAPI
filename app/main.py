@@ -1,8 +1,10 @@
 import base64
 import os
+import io
 
 import requests
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from PIL import Image
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 
@@ -27,7 +29,22 @@ async def analyze_meal(image: UploadFile = File(...)):
 
     try:
         image_bytes = await image.read()
-        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+        try:
+            pil_img = Image.open(io.BytesIO(image_bytes))
+            
+            if pil_img.mode in ("RGBA", "P"):
+                pil_img = pil_img.convert("RGB")
+                
+            pil_img.thumbnail((800, 800))
+            
+            compressed_buffer = io.BytesIO()
+            pil_img.save(compressed_buffer, format="JPEG", optimize=True, quality=70)
+            
+            compressed_bytes = compressed_buffer.getvalue()
+            
+        except Exception as e:
+             raise HTTPException(status_code=400, detail=f"Erreur lors de la lecture/compression de l'image: {str(e)}")
+        image_base64 = base64.b64encode(compressed_bytes).decode("utf-8")
 
         prompt = """
         Tu es un expert en nutrition. 
@@ -41,6 +58,8 @@ async def analyze_meal(image: UploadFile = File(...)):
             "prompt": prompt,
             "image": [image_base64],
             "stream": False,
+            "temperature": 0.4,
+            "max_tokens": 800,
         }
 
         response = requests.post(f"{OLLAMA_URL}/api/generate", json=payload)
