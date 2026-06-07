@@ -79,7 +79,6 @@ async def analyze_meal(image: UploadFile = File(...)):
     """Analyse une image de repas → données nutritionnelles structurées (LLaVA)."""
     if not image.content_type or not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Le fichier doit être une image.")
-
     #L'image arrive par le réseau -> on lit les octets et on encode en base64
     image_bytes = await image.read()
     image_base64 = base64.b64encode(image_bytes).decode("utf-8")
