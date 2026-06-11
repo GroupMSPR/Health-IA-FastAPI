@@ -4,3 +4,5 @@ python-multipart
 requests
 ruff
 Pillow
+joblib
+numpy
