@@ -1,8 +1,9 @@
 
+from fastapi import FastAPI, File, HTTPException, UploadFile
+
 from app.exercice import ExercicePredictionService
 from app.food import guess_image
 from app.user import User
-from fastapi import FastAPI, File, HTTPException, UploadFile
 
 app = FastAPI(
     title="HealthAI Coach - API IA",
@@ -11,7 +12,7 @@ app = FastAPI(
 )
 
 eps = ExercicePredictionService()
-    
+
 @app.get("/")
 def read_root():
     return {"message": "API IA Opérationnelle sur le port 4000"}

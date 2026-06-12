@@ -1,8 +1,9 @@
 import base64
 import json
 import os
-from fastapi import File, HTTPException, UploadFile
+
 import requests
+from fastapi import File, HTTPException, UploadFile
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 MODEL_NAME = "llava"
@@ -61,8 +62,8 @@ def extract_json(text: str):
             return None
         return json.loads(text[start:end])
     except json.JSONDecodeError:
-        return None        
-    
+        return None
+
 async def guess_image(image: UploadFile = File(...)) :
     """Analyse une image de repas → données nutritionnelles structurées (LLaVA)."""
     if not image.content_type or not image.content_type.startswith("image/"):
@@ -74,9 +75,9 @@ async def guess_image(image: UploadFile = File(...)) :
     payload = {
         "model": MODEL_NAME,
         "prompt": build_nutrition_prompt(),
-        "images": [image_base64],         
+        "images": [image_base64],
         "stream": False,
-        "options": {"temperature": 0.1},   
+        "options": {"temperature": 0.1},
     }
 
     try:
@@ -84,16 +85,16 @@ async def guess_image(image: UploadFile = File(...)) :
         response.raise_for_status()
         raw = response.json().get("response", "")
         data = extract_json(raw)
-    
+
         if data is not None:
             return {"status": "success", "is_working": 0, "data": data}
 
     except requests.exceptions.RequestException:
-        pass 
+        pass
 
     return {
         "status": "degraded",
         "is_working": 1,
-        "data": None, 
+        "data": None,
         "message": "Analyse automatique impossible. Veuillez saisir les aliments manuellement."
     }
