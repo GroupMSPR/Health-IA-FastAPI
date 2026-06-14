@@ -61,7 +61,7 @@ class User(Base):
     physical_activity_level = Column(String(50), nullable=False)
     daily_caloric_intake = Column(Integer, nullable=False)
 
-    favorite_exercice_categorie = Column(String)
+    favorite_exercise_categorie = Column(String)
 
     practices = relationship("Practice", back_populates="user")
 

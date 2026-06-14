@@ -4,13 +4,13 @@ from pathlib import Path
 import joblib
 import numpy as np
 
-from app.response import ExercicePredictionOutput
+from app.response import ExercisePredictionOutput
 from app.user import User
 
 MODELS_DIR = Path(__file__).parent.parent / 'models'
 
-class ExercicePredictionService:
-    """Init the exercice recomendation AI"""
+class ExercisePredictionService:
+    """Init the exercise recomendation AI"""
     def __init__(self):
         self.model   = joblib.load(MODELS_DIR / 'model.pkl')
         self.encoder = joblib.load(MODELS_DIR / 'encoder.pkl')
@@ -38,8 +38,8 @@ class ExercicePredictionService:
                 return -1
 
     @staticmethod
-    def map_favorite_exercice_categorie(favorite_exercice_categorie: str):
-        match (favorite_exercice_categorie.lower()):
+    def map_favorite_exercise_categorie(favorite_exercise_categorie: str):
+        match (favorite_exercise_categorie.lower()):
             case "poids du corps":
                 return 0
             case "musculation":
@@ -49,34 +49,29 @@ class ExercicePredictionService:
             case _:
                 return -1
 
-    def predict(self, user: User) -> ExercicePredictionOutput:
+    def predict(self, user: User) -> ExercisePredictionOutput:
         X = np.array([[
                 self.map_physical_activity_level(user.physical_activity_level),
                 user.bmi,
                 self.calculate_age(user.birthdate),
-                self.map_favorite_exercice_categorie(user.favorite_exercice_categorie)
+                self.map_favorite_exercise_categorie(user.favorite_exercise_categorie)
             ]])
 
-        # Get probabilities for all classes
         probabilities = self.model.predict_proba(X)[0]
 
-        # Get all class labels (numeric indices)
         classes = self.model.classes_
 
-        # Create list of (exercice, confidence) sorted by confidence descending
         predictions_list = []
         for class_idx, confidence in zip(classes, probabilities):
-            # Convert numeric index back to exercise name using encoder
-            exercice_name = self.encoder.inverse_transform([[class_idx]])[0]
+            exercise_name = self.encoder.inverse_transform([[class_idx]])[0]
             predictions_list.append({
-                'exercice': exercice_name,
+                'exercise': exercise_name,
                 'confidence': round(float(confidence), 3)
             })
 
-        # Sort by confidence descending
         predictions_list.sort(key=lambda x: x['confidence'], reverse=True)
 
-        from app.response import ExercicePrediction
-        return ExercicePredictionOutput(
-            predictions=[ExercicePrediction(**pred) for pred in predictions_list]
+        from app.response import ExercisePrediction
+        return ExercisePredictionOutput(
+            predictions=[ExercisePrediction(**pred) for pred in predictions_list]
         )

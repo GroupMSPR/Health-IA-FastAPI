@@ -87,14 +87,14 @@ async def guess_image(image: UploadFile = File(...)) :
         data = extract_json(raw)
 
         if data is not None:
-            return {"status": "success", "is_working": 0, "data": data}
+            return {"status": "success", "is_working": 1, "data": data}
 
     except requests.exceptions.RequestException:
         pass
 
     return {
         "status": "degraded",
-        "is_working": 1,
+        "is_working": 0,
         "data": None,
         "message": "Analyse automatique impossible. Veuillez saisir les aliments manuellement."
     }

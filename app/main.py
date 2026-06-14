@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pymongo import MongoClient
 
-from app.exercice import ExercicePredictionService
+from app.exercise import ExercisePredictionService
 from app.food import guess_image
 from app.user import User
 
@@ -14,12 +14,12 @@ app = FastAPI(
     version="1.0.0",
 )
 
-eps = ExercicePredictionService()
+eps = ExercisePredictionService()
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://root:example@mongodb:27017/")
 client = MongoClient(MONGO_URI)
 db = client.healthai
-exercise_recommendations_col = db.exercise_recomendation
+exercise_recommendations = db.exercise_recomendation
 food_recomendation = db.food_recomendation
 
 @app.get("/")
@@ -29,11 +29,20 @@ def read_root():
 @app.post("/analyze-meal")
 async def analyze_meal(image: UploadFile = File(...)):
     """Analyse une image de repas → données nutritionnelles structurées (LLaVA)."""
-    return await guess_image(image)
+    image_result = await guess_image(image)
+    
+    doc_to_insert = {
+        "status": image_result["status"],
+        "data": image_result["data"]
+    }
+    
+    food_recomendation.insert_one(doc_to_insert)
+
+    return image_result
 
 @app.post("/recommend")
-def get_exercices(user: User):
-    """get a list of all exercice with ai probability"""
+def get_exercises(user: User):
+    """get a list of all exercise with ai probability"""
     try: 
         prediction_output = eps.predict(user)
 
@@ -43,7 +52,7 @@ def get_exercices(user: User):
             "created_at": datetime.now(UTC)
         }
 
-        exercise_recommendations_col.insert_one(doc_to_insert)
+        exercise_recommendations.insert_one(doc_to_insert)
 
         return prediction_output
 

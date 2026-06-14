@@ -2,9 +2,9 @@
 from pydantic import BaseModel
 
 
-class ExercicePrediction(BaseModel):
-    exercice:    str
+class ExercisePrediction(BaseModel):
+    exercise:    str
     confidence: float
 
-class ExercicePredictionOutput(BaseModel):
-    predictions: list[ExercicePrediction]
+class ExercisePredictionOutput(BaseModel):
+    predictions: list[ExercisePrediction]
