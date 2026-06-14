@@ -30,13 +30,21 @@ def read_root():
 async def analyze_meal(image: UploadFile = File(...)):
     """Analyse une image de repas → données nutritionnelles structurées (LLaVA)."""
     image_result = await guess_image(image)
-    
-    doc_to_insert = {
-        "status": image_result["status"],
-        "data": image_result["data"]
-    }
-    
-    food_recomendation.insert_one(doc_to_insert)
+
+    try:
+        if (image_result["data"] != None):
+            doc_to_insert = {
+                "status": image_result["status"],
+                "data": image_result["data"].model_dump(mode="json")
+            }
+        else :
+            doc_to_insert = {
+                "status": image_result["status"],
+                "data": "crashed"
+            }
+        food_recomendation.insert_one(doc_to_insert)
+    except Exception as ex:
+        print(ex)
 
     return image_result
 
@@ -52,8 +60,10 @@ def get_exercises(user: User):
             "created_at": datetime.now(timezone.utc)
         }
 
-        exercise_recommendations.insert_one(doc_to_insert)
-
+        try: 
+            exercise_recommendations.insert_one(doc_to_insert)
+        except Exception as ex:
+            print(ex)
         return prediction_output
 
     except Exception as e:
