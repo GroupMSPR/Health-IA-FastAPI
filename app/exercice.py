@@ -39,12 +39,12 @@ class ExercicePredictionService:
 
     @staticmethod
     def map_favorite_exercice_categorie(favorite_exercice_categorie: str):
-        match (favorite_exercice_categorie):
-            case "Poids du corps":
+        match (favorite_exercice_categorie.lower()):
+            case "poids du corps":
                 return 0
-            case "Musculation":
+            case "musculation":
                 return 1
-            case "Cardio":
+            case "cardio":
                 return 2
             case _:
                 return -1
