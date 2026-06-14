@@ -1,5 +1,5 @@
 import os
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pymongo import MongoClient
@@ -47,9 +47,9 @@ def get_exercises(user: User):
         prediction_output = eps.predict(user)
 
         doc_to_insert = {
-            "user_profile": user.model_dump(mode='json'),
-            "recommendations": [p.model_dump() for p in prediction_output.predictions[:10]],
-            "created_at": datetime.now(UTC)
+            "user_profile": user.model_dump(mode="json"),
+            "recommendations": [p.model_dump(mode="json") for p in prediction_output.predictions[:10]],
+            "created_at": datetime.now(timezone.utc)
         }
 
         exercise_recommendations.insert_one(doc_to_insert)
