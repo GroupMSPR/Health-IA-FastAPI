@@ -1,7 +1,17 @@
 import os
 import uuid
+
 from dotenv import load_dotenv
-from sqlalchemy import Uuid, NUMERIC, SMALLINT, Column, Date, DateTime, ForeignKey, Numeric, SmallInteger, String, Integer, Text, Time
+from sqlalchemy import (
+    Column,
+    Date,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    Uuid,
+)
 from sqlalchemy.orm import DeclarativeBase, relationship
 
 load_dotenv()
@@ -55,10 +65,10 @@ class User(Base):
 
     practices = relationship("Practice", back_populates="user")
 
-class Exercise(Base) : 
+class Exercise(Base) :
 
     __tablename__       = "exercises"
-    
+
     exercise_id         = Column(Uuid, primary_key=True, default=uuid.uuid4)
     name                = Column(String(50), nullable=False)
     type                = Column(String(50), nullable=False)

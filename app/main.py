@@ -1,5 +1,6 @@
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pymongo import MongoClient
 
@@ -34,16 +35,16 @@ def get_exercices(user: User):
     """get a list of all exercice with ai probability"""
     try: 
         prediction_output = eps.predict(user)
-        
+
         doc_to_insert = {
             "user_profile": user.model_dump(),
             "recommendations": [p.model_dump() for p in prediction_output.predictions],
-            "created_at": datetime.now(timezone.utc)
+            "created_at": datetime.now(UTC)
         }
-        
+
         recommendations_col.insert_one(doc_to_insert)
 
         return prediction_output
-        
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
