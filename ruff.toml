@@ -29,3 +29,4 @@ line-ending = "auto"
 [lint.per-file-ignores]
 "app/main.py" = ["E501", "W291"]
 "app/food.py" = ["E501"]
+"notebook/recomendation.ipynb" = ["I001"]

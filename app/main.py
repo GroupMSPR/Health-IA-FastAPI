@@ -1,5 +1,7 @@
-
+import os
+from datetime import datetime, timezone
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from pymongo import MongoClient
 
 from app.exercice import ExercicePredictionService
 from app.food import guess_image
@@ -12,6 +14,11 @@ app = FastAPI(
 )
 
 eps = ExercicePredictionService()
+
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://root:example@mongodb:27017/")
+client = MongoClient(MONGO_URI)
+db = client.healthai
+recommendations_col = db.recommendations
 
 @app.get("/")
 def read_root():
@@ -26,6 +33,17 @@ async def analyze_meal(image: UploadFile = File(...)):
 def get_exercices(user: User):
     """get a list of all exercice with ai probability"""
     try: 
-        return eps.predict(user)
+        prediction_output = eps.predict(user)
+        
+        doc_to_insert = {
+            "user_profile": user.model_dump(),
+            "recommendations": [p.model_dump() for p in prediction_output.predictions],
+            "created_at": datetime.now(timezone.utc)
+        }
+        
+        recommendations_col.insert_one(doc_to_insert)
+
+        return prediction_output
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

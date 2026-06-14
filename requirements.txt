@@ -7,3 +7,4 @@ Pillow
 joblib
 numpy
 scikit-learn
+pymongo
