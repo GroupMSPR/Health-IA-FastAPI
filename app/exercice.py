@@ -34,6 +34,8 @@ class ExercicePredictionService:
                 return 1
             case "active":
                 return 2
+            case _:
+                return -1
 
     @staticmethod
     def map_favorite_exercice_categorie(favorite_exercice_categorie: str):
@@ -44,6 +46,8 @@ class ExercicePredictionService:
                 return 1
             case "Cardio":
                 return 2
+            case _:
+                return -1
 
     def predict(self, user: User) -> ExercicePredictionOutput:
         X = np.array([[
