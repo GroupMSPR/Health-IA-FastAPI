@@ -19,7 +19,8 @@ eps = ExercicePredictionService()
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://root:example@mongodb:27017/")
 client = MongoClient(MONGO_URI)
 db = client.healthai
-recommendations_col = db.recommendations
+exercise_recommendations_col = db.exercise_recomendation
+food_recomendation = db.food_recomendation
 
 @app.get("/")
 def read_root():
@@ -37,12 +38,12 @@ def get_exercices(user: User):
         prediction_output = eps.predict(user)
 
         doc_to_insert = {
-            "user_profile": user.model_dump(),
-            "recommendations": [p.model_dump() for p in prediction_output.predictions],
+            "user_profile": user.model_dump(mode='json'),
+            "recommendations": [p.model_dump() for p in prediction_output.predictions[:10]],
             "created_at": datetime.now(UTC)
         }
 
-        recommendations_col.insert_one(doc_to_insert)
+        exercise_recommendations_col.insert_one(doc_to_insert)
 
         return prediction_output
 
