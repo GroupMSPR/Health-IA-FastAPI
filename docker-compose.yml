@@ -13,6 +13,8 @@ services:
     depends_on:
       - ollama
       - mongodb
+    networks:
+      - sail
     restart: always
   
   ollama:
@@ -22,8 +24,10 @@ services:
       - "11434:11434"
     volumes:
       - ./ollama-models:/root/.ollama
+    networks:
+      - sail
     restart: always
-
+  
     # decommente 'deploy' si tu as une gpu nvidia et wsl2
     # deploy:
     #   resources:
@@ -43,7 +47,14 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=example
     volumes:
       - mongo_data:/data/db
+    networks:
+      - sail
     restart: always
+
+networks:
+  sail:
+    external: true
+    name: healthai_backend_sail
 
 volumes:
   mongo_data:
