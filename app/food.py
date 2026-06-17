@@ -10,14 +10,25 @@ MODEL_NAME = "llava"
 TIMEOUT = 120
 
 def build_nutrition_prompt() -> str:
-    return """You are a nutrition expert. Analyze the meal photo and respond with ONLY valid JSON, no markdown, no text outside JSON.
+    return """You are a nutrition expert analyzing a food photo. Respond with ONLY valid JSON, no markdown, no text outside JSON.
+
+    ANALYSIS APPROACH (follow in order):
+    1. First, identify if the image shows ONE single food item or MULTIPLE distinct items/dishes.
+    2. For a SINGLE item (e.g. one fruit, one piece of food): name that SPECIFIC item precisely
+       (e.g. "passion fruit", not "fruit salad" — a single cut fruit is NOT a salad).
+    3. For MULTIPLE items: only then consider naming it as a "salad", "platter", "mixed dish", etc.
+    4. Pay attention to: skin/peel texture, seed pattern, color gradient, and shape —
+       these distinguish similar-looking foods (e.g. passion fruit pulp has fibrous seeds
+       inside a hard shell, unlike a cut fruit salad which shows multiple separate fruit pieces).
 
     RULES:
     - ALWAYS estimate nutritional values even if the image is imperfect. Never return -1 for nutrition fields.
     - Base estimates on the dish type and typical portion if visual cues are unclear.
     - Use -1 ONLY if the image contains no identifiable food at all.
-    - confidence: integer 0-100 based on your actual analysis
+    - confidence: integer 0-100 based on your actual visual analysis (lower confidence for ambiguous/ blurry images)
+    - confidence_reason: MUST reference specific visual details you observed (texture, color, shape, container)
     - allergens: only those actually present or very likely
+    - alternatives: list 1-3 plausible alternative identifications, ordered by likelihood
 
     VALID ENUMS:
     - portion_type: "estimated_visible" | "standard_serving"
@@ -27,11 +38,11 @@ def build_nutrition_prompt() -> str:
 
     EXACT JSON STRUCTURE:
     {
-    "name": "<dish name in english>",
-    "portion_size_g": <estimate based on dish type, e.g. pasta=350, salad=250, burger=300>,
+    "name": "<precise dish/food name in english>",
+    "portion_size_g": <estimate based on dish type, e.g. pasta=350, salad=250, burger=300, single fruit=100-200>,
     "portion_type": "<enum>",
     "confidence": <integer>,
-    "confidence_reason": "<your reason>",
+    "confidence_reason": "<specific visual details observed>",
     "alternatives": [{"name": "<alt dish>", "confidence": <integer>}],
     "flags": [],
     "cooking_method": "<enum>",
