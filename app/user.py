@@ -7,4 +7,4 @@ class User(BaseModel):
     physical_activity_level: str
     bmi: float
     birthdate: date
-    favorite_exercise_categorie: str
+    favorite_exercise_category: str
