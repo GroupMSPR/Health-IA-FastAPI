@@ -1,5 +1,5 @@
 import os
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from pymongo import MongoClient
@@ -37,7 +37,7 @@ async def analyze_meal(image: UploadFile = File(...)):
                 "status": image_result["status"],
                 "data": image_result["data"].model_dump(mode="json")
             }
-        else:
+        else :
             doc_to_insert = {
                 "status": image_result["status"],
                 "data": "crashed"
@@ -51,16 +51,16 @@ async def analyze_meal(image: UploadFile = File(...)):
 @app.post("/recommend")
 def get_exercises(user: User):
     """get a list of all exercise with ai probability"""
-    try:
+    try: 
         prediction_output = eps.predict(user)
 
         doc_to_insert = {
             "user_profile": user.model_dump(mode="json"),
             "recommendations": [p.model_dump(mode="json") for p in prediction_output.predictions[:10]],
-            "created_at": datetime.now(UTC)
+            "created_at": datetime.now(timezone.utc)
         }
 
-        try:
+        try: 
             exercise_recommendations.insert_one(doc_to_insert)
         except Exception as ex:
             print(ex)
