@@ -6,6 +6,7 @@ from fastapi import HTTPException
 
 from app.food import build_nutrition_prompt, extract_json, guess_image
 
+
 def test_build_nutrition_prompt_returns():
     prompt = build_nutrition_prompt()
     assert isinstance(prompt, str)
@@ -24,12 +25,12 @@ def test_build_nutrition_prompt_contains_enums():
     assert "grilled" in prompt
     assert "breakfast" in prompt
 
-def test_extract_json_valid(): 
+def test_extract_json_valid():
     text = '{"name": "burger", "calories": 500}'
     result = extract_json(text)
     assert result == {"name": "burger", "calories": 500}
 
-def test_extract_json_no_braces(): 
+def test_extract_json_no_braces():
     result = extract_json("Pas de JSON")
     assert result is None
 
@@ -78,7 +79,7 @@ async def test_guess_image_success():
     mock_response.json.return_value = {
         "response" : json.dumps(fake_response_data)
     }
-    
+
     mock_response.raise_for_status = MagicMock()
 
     with patch("app.food.requests.post", return_value=mock_response):

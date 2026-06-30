@@ -1,0 +1,10 @@
+[tool.ruff]
+line-length = 130
+exclude = [
+    ".git",
+    "notebook",
+    "*.ipynb",
+]
+
+[tool.ruff.lint]
+ignore = ["E501"]
