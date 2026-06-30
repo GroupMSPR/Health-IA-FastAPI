@@ -38,7 +38,7 @@ class ExercisePredictionService:
                 return -1
 
     @staticmethod
-    def map_favorite_exercise_categorie(favorite_exercise_categorie: str):
+    def map_favorite_exercise_category(favorite_exercise_categorie: str):
         match (favorite_exercise_categorie.lower()):
             case "poids du corps":
                 return 0
@@ -54,7 +54,7 @@ class ExercisePredictionService:
                 self.map_physical_activity_level(user.physical_activity_level),
                 user.bmi,
                 self.calculate_age(user.birthdate),
-                self.map_favorite_exercise_categorie(user.favorite_exercise_categorie)
+                self.map_favorite_exercise_category(user.favorite_exercise_category)
             ]])
 
         probabilities = self.model.predict_proba(X)[0]

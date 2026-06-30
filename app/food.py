@@ -7,7 +7,7 @@ from fastapi import File, HTTPException, UploadFile
 
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 MODEL_NAME = "llava"
-TIMEOUT = 120
+TIMEOUT = 240
 
 def build_nutrition_prompt() -> str:
     return """You are a nutrition expert analyzing a food photo. Respond with ONLY valid JSON, no markdown, no text outside JSON.

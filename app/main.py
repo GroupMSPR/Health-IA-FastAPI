@@ -32,7 +32,7 @@ async def analyze_meal(image: UploadFile = File(...)):
     image_result = await guess_image(image)
 
     try:
-        if (image_result["data"] != None):
+        if image_result["data"] is not None:
             doc_to_insert = {
                 "status": image_result["status"],
                 "data": image_result["data"].model_dump(mode="json")

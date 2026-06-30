@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 130
+exclude = [
+    ".git",
+    "notebook",
+    "*.ipynb",
+]
+
+[tool.ruff.lint]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "strict"
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/__init__.py"]
