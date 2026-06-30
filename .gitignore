@@ -5,3 +5,9 @@ __pycache__
 
 docker-volumes/
 ollama-models/
+
+# tests / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
